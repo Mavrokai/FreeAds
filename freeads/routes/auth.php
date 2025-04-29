@@ -8,6 +8,7 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\VerifyEmail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UtilisateurController;
 
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)->name('login');

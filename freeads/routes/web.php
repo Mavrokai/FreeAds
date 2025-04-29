@@ -6,12 +6,8 @@ use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 
 
+
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
-
-Route::get('/index', function () {
     return view('index');
 })->name('index');
 
@@ -27,4 +23,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
