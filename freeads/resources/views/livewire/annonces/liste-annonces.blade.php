@@ -8,6 +8,23 @@
                         <input wire:model.live.debounce.300ms="search" type="text" placeholder="Rechercher..."
                             class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                     </div>
+                    <div>
+                        <input wire:model.live="filters.min_price" type="number" placeholder="Prix min (€)"
+                            class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    </div>
+                    <div>
+                        <input wire:model.live="filters.max_price" type="number" placeholder="Prix max (€)"
+                            class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    </div>
+                    <div>
+                        <select wire:model.live="filters.tag" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="">Tous les tags</option>
+                            <option value="informatique">Informatique</option>
+                            <option value="numérique">Numérique</option>
+                            <option value="animaux">Animaux</option>
+                            <option value="outils">Outils</option>
+                        </select>
+                    </div>
                     <a href="{{ route('annonces.create') }}"
                         class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
                         Nouvelle annonce
@@ -39,6 +56,17 @@
                         <div class="p-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white truncate">{{ $annonce->titre }}</h3>
                             <p class="mt-1 text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{{ $annonce->description }}</p>
+
+                            @if($annonce->tag)
+                            <div class="mt-2 flex flex-wrap gap-1">
+                                @foreach(explode(',', $annonce->tag) as $tag)
+                                    <span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full text-xs">
+                                        {{ $tag }}
+                                    </span>
+                                @endforeach
+                            </div>
+                            @endif
+
                             <div class="mt-4 flex justify-between items-center">
                                 <span class="text-xs text-gray-500 dark:text-gray-400">
                                     {{ $annonce->created_at->format('d/m/Y') }}

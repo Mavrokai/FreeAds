@@ -29,6 +29,18 @@
                     @error('prix') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
 
+                <div class="mb-4">
+                    <label for="tag" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tag</label>
+                    <select id="tag" wire:model="tag" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <option value="">Choisir un tag</option>
+                        <option value="informatique">Informatique</option>
+                        <option value="numérique">Numérique</option>
+                        <option value="animaux">Animaux</option>
+                        <option value="outils">Outils</option>
+                    </select>
+                    @error('tag') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                </div>
+
                 <div class="mb-6">
                     <label for="photo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Photo</label>
 

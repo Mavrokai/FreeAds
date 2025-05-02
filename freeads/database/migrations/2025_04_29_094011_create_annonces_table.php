@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->decimal('prix', 10, 2);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('tag')->nullable();
             $table->timestamps();
         });
     }

@@ -20,11 +20,14 @@ class Annonce extends Model
         'photo',
         'prix',
         'user_id',
+        'tag',
+        'tags',
     ];
 
 
     protected $casts = [
         'prix' => 'decimal:2',
+        'tags' => 'array',
     ];
 
 

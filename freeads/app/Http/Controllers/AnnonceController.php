@@ -35,6 +35,7 @@ class AnnonceController extends Controller
             'prix' => 'required|numeric|min:0',
             'photos' => 'required|array|min:1',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'tags' => 'nullable|string',
         ]);
 
 
@@ -44,6 +45,11 @@ class AnnonceController extends Controller
             'prix' => $validated['prix'],
             'user_id' => Auth::id(),
         ]);
+
+        // Gestion des tags
+        if (isset($validated['tags']) && !empty($validated['tags'])) {
+            $annonce->tag = $validated['tags'];
+        }
 
         $annonce->save();
 
@@ -84,6 +90,7 @@ class AnnonceController extends Controller
             'prix' => 'required|numeric|min:0',
             'photos' => 'nullable|array',
             'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'tags' => 'nullable|string',
         ]);
 
 
@@ -92,6 +99,12 @@ class AnnonceController extends Controller
             'description' => $validated['description'],
             'prix' => $validated['prix'],
         ]);
+
+
+        if (isset($validated['tags']) && !empty($validated['tags'])) {
+            $annonce->tag = $validated['tags'];
+            $annonce->save();
+        }
 
 
         if ($request->hasFile('photos')) {
@@ -153,5 +166,11 @@ class AnnonceController extends Controller
 
             $firstPhoto = false;
         }
+    }
+
+    public function recent()
+    {
+        $annonces = Annonce::with('photos')->latest()->take(10)->get();
+        return view('annonces.recent', compact('annonces'));
     }
 }

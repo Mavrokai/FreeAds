@@ -19,6 +19,7 @@ class FormulaireAnnonce extends Component
     public $prix = '';
     public $photo;
     public $photoActuelle;
+    public $tag = '';
 
     public function mount(?Annonce $annonce = null)
     {
@@ -28,6 +29,7 @@ class FormulaireAnnonce extends Component
             $this->description = $annonce->description;
             $this->prix = $annonce->prix;
             $this->photoActuelle = $annonce->photo;
+            $this->tag = $annonce->tag;
         }
     }
 
@@ -37,6 +39,7 @@ class FormulaireAnnonce extends Component
             'titre' => 'required|string|max:255',
             'description' => 'required|string',
             'prix' => 'required|numeric|min:0',
+            'tag' => 'nullable|string|max:255',
             'photo' => $this->annonce && $this->annonce->exists
                 ? 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
                 : 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -57,6 +60,7 @@ class FormulaireAnnonce extends Component
             'titre' => $this->titre,
             'description' => $this->description,
             'prix' => $this->prix,
+            'tag' => $this->tag,
             'user_id' => Auth::id(),
         ];
 

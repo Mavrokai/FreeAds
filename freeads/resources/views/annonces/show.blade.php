@@ -62,6 +62,21 @@
                                 </div>
                             </div>
 
+                            <div class="mb-6">
+                                <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Tags</h2>
+                                <div class="flex flex-wrap gap-2">
+                                    @if($annonce->tag)
+                                        @foreach(explode(',', $annonce->tag) as $tag)
+                                            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">
+                                                {{ $tag }}
+                                            </span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-gray-500 dark:text-gray-400">Aucun tag</span>
+                                    @endif
+                                </div>
+                            </div>
+
                             <div class="mt-8 flex space-x-4">
                                 @if(Auth::id() === $annonce->user_id)
                                     <a href="{{ route('annonces.edit', $annonce) }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:border-yellow-700 focus:ring ring-yellow-300 disabled:opacity-25 transition ease-in-out duration-150">

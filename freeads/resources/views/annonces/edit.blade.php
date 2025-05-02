@@ -19,7 +19,6 @@
                         @csrf
                         <input type="hidden" name="_method" value="PUT">
 
-
                         <div class="mb-4">
                             <label for="titre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Titre</label>
                             <input type="text" name="titre" id="titre" value="{{ old('titre', $annonce->titre) }}"
@@ -47,6 +46,31 @@
                             @enderror
                         </div>
 
+                        <div class="mb-4">
+                            <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tags</label>
+                            <div id="selected-tags" class="flex flex-wrap gap-2 mb-2">
+                                @if($annonce->tag)
+                                    @foreach(explode(',', $annonce->tag) as $tag)
+                                        <div class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full flex items-center gap-2" data-value="{{ $tag }}">
+                                            <span>{{ $tag }}</span>
+                                            <button type="button" class="text-red-500 hover:text-red-700">×</button>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                            <input type="hidden" name="tags" id="tagsInput" value="{{ old('tags', $annonce->tag) }}">
+                            <select id="tags-select" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Choisir un tag</option>
+                                <option value="informatique">Informatique</option>
+                                <option value="numérique">Numérique</option>
+                                <option value="animaux">Animaux</option>
+                                <option value="outils">Outils</option>
+                            </select>
+                            @error('tags')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Photos actuelles</label>
 
@@ -55,7 +79,6 @@
                                     @foreach($annonce->photos as $photo)
                                         <div class="relative group">
                                             <img src="{{ Storage::url($photo->chemin) }}" class="w-full h-32 object-cover rounded-md" alt="Photo de l'annonce">
-
 
                                             <div class="absolute top-1 right-1 z-50">
                                                 <button type="button" class="delete-photo-btn bg-red-600 text-white p-1 rounded-full hover:bg-red-700"
@@ -156,17 +179,60 @@
             const debugInfo = document.getElementById('form-debug-info');
             const debugContent = document.getElementById('debug-content');
             const submitButton = document.getElementById('submitButton');
+            const tagsSelect = document.getElementById('tags-select');
+            const selectedTagsContainer = document.getElementById('selected-tags');
+            const tagsInput = document.getElementById('tagsInput');
 
+            // Fonction pour mettre à jour le champ caché des tags
+            function updateTagsInput() {
+                const selectedTags = Array.from(selectedTagsContainer.children).map(tag => tag.dataset.value);
+                tagsInput.value = selectedTags.join(',');
+            }
+
+            // Ajouter des gestionnaires d'événements pour les boutons de suppression de tags existants
+            document.querySelectorAll('#selected-tags button').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.parentElement.remove();
+                    updateTagsInput();
+                });
+            });
+
+            // Gestionnaire pour l'ajout de nouveaux tags
+            tagsSelect.addEventListener('change', function() {
+                const selectedValue = tagsSelect.value;
+
+                if (selectedValue && !Array.from(selectedTagsContainer.children).some(tag => tag.dataset.value === selectedValue)) {
+                    const tagElement = document.createElement('div');
+                    tagElement.className = 'bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full flex items-center gap-2';
+                    tagElement.dataset.value = selectedValue;
+
+                    const tagText = document.createElement('span');
+                    tagText.textContent = selectedValue;
+
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'text-red-500 hover:text-red-700';
+                    removeButton.textContent = '×';
+                    removeButton.type = 'button';
+                    removeButton.addEventListener('click', function() {
+                        tagElement.remove();
+                        updateTagsInput();
+                    });
+
+                    tagElement.appendChild(tagText);
+                    tagElement.appendChild(removeButton);
+                    selectedTagsContainer.appendChild(tagElement);
+
+                    tagsSelect.value = '';
+                    updateTagsInput();
+                }
+            });
 
             document.querySelectorAll('.delete-photo-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const photoId = this.getAttribute('data-photo-id');
 
                     if (confirm('Êtes-vous sûr de vouloir supprimer cette photo ?')) {
-
-
                         const csrfToken = document.querySelector('input[name="_token"]').value;
-
 
                         fetch(`/photos/${photoId}`, {
                             method: 'DELETE',
@@ -184,10 +250,8 @@
                         })
                         .then(data => {
                             if (data.success) {
-
                                 const photoElement = this.closest('.group');
                                 photoElement.remove();
-
 
                                 const successAlert = document.createElement('div');
                                 successAlert.className = 'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded';
@@ -195,7 +259,6 @@
 
                                 const container = document.querySelector('.max-w-3xl');
                                 container.insertBefore(successAlert, container.firstChild);
-
 
                                 setTimeout(() => {
                                     successAlert.style.transition = 'opacity 1s';
@@ -216,10 +279,8 @@
                 });
             });
 
-
             submitButton.addEventListener('click', function(e) {
                 e.preventDefault();
-
 
                 let methodInputExists = false;
                 for(let input of form.elements) {
@@ -229,7 +290,6 @@
                     }
                 }
 
-
                 if(!methodInputExists) {
                     const methodInput = document.createElement('input');
                     methodInput.type = 'hidden';
@@ -238,13 +298,10 @@
                     form.appendChild(methodInput);
                 }
 
-
-
                 submitButton.textContent = 'Mise à jour en cours...';
                 submitButton.disabled = true;
 
                 try {
-
                     debugInfo.classList.remove('hidden');
 
                     const formData = new FormData(form);
@@ -263,7 +320,6 @@
 
                     console.log('Formulaire soumis:', formValues);
 
-
                     setTimeout(() => {
                         form.submit();
                     }, 500);
@@ -273,7 +329,6 @@
                     form.submit();
                 }
             });
-
 
             form.addEventListener('submit', function(e) {
             });
