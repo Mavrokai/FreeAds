@@ -72,7 +72,7 @@ class FormulaireAnnonce extends Component
             session()->flash('success', 'Annonce créée avec succès!');
         }
 
-        return redirect()->route('annonces.index');
+        return redirect()->route('livewire.annonces.liste');
     }
 
     public function render(): View

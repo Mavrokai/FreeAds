@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ $annonce->titre }}
             </h2>
-            <a href="{{ route('annonces.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-800 dark:text-white uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-600 active:bg-gray-500 dark:active:bg-gray-500 focus:outline-none focus:border-gray-500 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+            <a href="{{ route('livewire.annonces.liste') }}" class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-800 dark:text-white uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-600 active:bg-gray-500 dark:active:bg-gray-500 focus:outline-none focus:border-gray-500 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                 Retour aux annonces
             </a>
         </div>
@@ -26,10 +26,10 @@
 
                                 @if($annonce->photos->count() > 1)
                                     <div class="grid grid-cols-5 gap-2">
-                                        @foreach($annonce->photos as $photo)
+                                        @foreach($annonce->photos->filter(fn($photo) => $photo->id !== $mainPhoto->id) as $photo)
                                             <img src="{{ Storage::url($photo->chemin) }}"
                                                  alt="Photo de l'annonce"
-                                                 class="w-full h-16 object-cover rounded cursor-pointer hover:opacity-75 transition-opacity {{ $photo->id === $mainPhoto->id ? 'ring-2 ring-indigo-500' : '' }}"
+                                                 class="w-full h-16 object-cover rounded cursor-pointer hover:opacity-75 transition-opacity"
                                                  onclick="document.getElementById('main-photo').src='{{ Storage::url($photo->chemin) }}'">
                                         @endforeach
                                     </div>
@@ -76,6 +76,9 @@
                                         </button>
                                     </form>
                                 @endif
+                                <a href={{ route('livewire.annonces.liste') }}  class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-800 dark:text-white uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-600 active:bg-gray-500 dark:active:bg-gray-500 focus:outline-none focus:border-gray-500 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                    Retour Au Annonces
+                                </a>
                             </div>
                         </div>
                     </div>

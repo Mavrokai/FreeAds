@@ -17,7 +17,7 @@ class AnnonceController extends Controller
     public function index()
     {
         $annonces = Annonce::with('photos')->latest()->paginate(12);
-        return view('annonces.index', compact('annonces'));
+        return view('liste-annonces', compact('annonces'));
     }
 
 
@@ -53,7 +53,7 @@ class AnnonceController extends Controller
         }
 
         return redirect()->route('annonces.show', $annonce)
-                         ->with('success', 'Annonce créée avec succès !');
+            ->with('success', 'Annonce créée avec succès !');
     }
 
 
@@ -99,7 +99,7 @@ class AnnonceController extends Controller
         }
 
         return redirect()->route('annonces.show', $annonce)
-                         ->with('success', 'Annonce mise à jour avec succès !');
+            ->with('success', 'Annonce mise à jour avec succès !');
     }
 
 
@@ -118,8 +118,8 @@ class AnnonceController extends Controller
 
         $annonce->delete();
 
-        return redirect()->route('annonces.index')
-                         ->with('success', 'Annonce supprimée avec succès !');
+        return redirect()->route('liste-annonces')
+            ->with('success', 'Annonce supprimée avec succès !');
     }
 
 

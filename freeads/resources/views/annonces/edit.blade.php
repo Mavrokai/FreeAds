@@ -56,7 +56,7 @@
                                         <div class="relative group">
                                             <img src="{{ Storage::url($photo->chemin) }}" class="w-full h-32 object-cover rounded-md" alt="Photo de l'annonce">
 
-                                            <!-- Bouton de suppression de photo avec formulaire AJAX -->
+
                                             <div class="absolute top-1 right-1 z-50">
                                                 <button type="button" class="delete-photo-btn bg-red-600 text-white p-1 rounded-full hover:bg-red-700"
                                                     title="Supprimer cette photo"
@@ -130,7 +130,7 @@
                         </div>
 
                         <div class="flex justify-between">
-                            <a href="{{ route('annonces.index') }}"
+                            <a href="{{ route('livewire.annonces.liste') }}"
                                 class="inline-flex items-center px-4 py-2 bg-gray-300 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-800 dark:text-white uppercase tracking-widest hover:bg-gray-400 dark:hover:bg-gray-600 active:bg-gray-500 dark:active:bg-gray-500 focus:outline-none focus:border-gray-500 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                 Annuler
                             </a>
@@ -157,17 +157,17 @@
             const debugContent = document.getElementById('debug-content');
             const submitButton = document.getElementById('submitButton');
 
-            // Gestion des boutons de suppression de photos
+
             document.querySelectorAll('.delete-photo-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const photoId = this.getAttribute('data-photo-id');
 
                     if (confirm('Êtes-vous sûr de vouloir supprimer cette photo ?')) {
-                        // Création du token CSRF pour la requête
-                        // On récupère le token directement à partir du formulaire principal
+
+
                         const csrfToken = document.querySelector('input[name="_token"]').value;
 
-                        // Création de la requête AJAX pour supprimer la photo
+
                         fetch(`/photos/${photoId}`, {
                             method: 'DELETE',
                             headers: {
@@ -184,11 +184,11 @@
                         })
                         .then(data => {
                             if (data.success) {
-                                // Si la suppression a réussi, on supprime l'élément du DOM
+
                                 const photoElement = this.closest('.group');
                                 photoElement.remove();
 
-                                // Afficher un message de succès
+
                                 const successAlert = document.createElement('div');
                                 successAlert.className = 'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded';
                                 successAlert.innerHTML = '<p>Photo supprimée avec succès !</p>';
@@ -196,7 +196,7 @@
                                 const container = document.querySelector('.max-w-3xl');
                                 container.insertBefore(successAlert, container.firstChild);
 
-                                // Faire disparaître le message après quelques secondes
+
                                 setTimeout(() => {
                                     successAlert.style.transition = 'opacity 1s';
                                     successAlert.style.opacity = '0';
@@ -216,11 +216,11 @@
                 });
             });
 
-            // Ajoutons un événement click directement sur le bouton
+
             submitButton.addEventListener('click', function(e) {
                 e.preventDefault();
 
-                // Vérifier que la méthode PUT est correctement définie
+
                 let methodInputExists = false;
                 for(let input of form.elements) {
                     if(input.name === '_method' && input.value === 'PUT') {
@@ -229,7 +229,7 @@
                     }
                 }
 
-                // Si la méthode PUT n'est pas définie, l'ajouter
+
                 if(!methodInputExists) {
                     const methodInput = document.createElement('input');
                     methodInput.type = 'hidden';
@@ -238,12 +238,13 @@
                     form.appendChild(methodInput);
                 }
 
-                // Modifier l'apparence du bouton immédiatement
+
+
                 submitButton.textContent = 'Mise à jour en cours...';
                 submitButton.disabled = true;
 
                 try {
-                    // Afficher les informations de débogage
+
                     debugInfo.classList.remove('hidden');
 
                     const formData = new FormData(form);
@@ -262,20 +263,19 @@
 
                     console.log('Formulaire soumis:', formValues);
 
-                    // Soumettre le formulaire après un court délai
+
                     setTimeout(() => {
-                        form.submit(); // Force la soumission du formulaire
+                        form.submit();
                     }, 500);
                 } catch (error) {
                     console.error("Erreur lors de la soumission:", error);
-                    // En cas d'erreur, soumettre quand même le formulaire
+
                     form.submit();
                 }
             });
 
-            // Empêcher la soumission directe du formulaire principal
+
             form.addEventListener('submit', function(e) {
-                // Ne rien faire ici pour éviter les doubles soumissions
             });
         });
     </script>

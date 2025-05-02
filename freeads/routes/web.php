@@ -18,13 +18,12 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 
-Route::get('/annonces', [AnnonceController::class, 'index'])->name('annonces.index');
-Route::get('/annonces/create', [AnnonceController::class, 'create'])->middleware('auth')->name('annonces.create');
-Route::post('/annonces', [AnnonceController::class, 'store'])->middleware('auth')->name('annonces.store');
-Route::get('/annonces/{annonce}', [AnnonceController::class, 'show'])->name('annonces.show');
-Route::get('/annonces/{annonce}/edit', [AnnonceController::class, 'edit'])->middleware('auth')->name('annonces.edit');
-Route::put('/annonces/{annonce}', [AnnonceController::class, 'update'])->middleware('auth')->name('annonces.update');
-Route::delete('/annonces/{annonce}', [AnnonceController::class, 'destroy'])->middleware('auth')->name('annonces.destroy');
+Route::get('/liste-annonces/create', [AnnonceController::class, 'create'])->middleware('auth')->name('annonces.create');
+Route::post('/liste-annonces', [AnnonceController::class, 'store'])->middleware('auth')->name('annonces.store');
+Route::get('/liste-annonces/{annonce}', [AnnonceController::class, 'show'])->name('annonces.show');
+Route::get('/liste-annonces/{annonce}/edit', [AnnonceController::class, 'edit'])->middleware('auth')->name('annonces.edit');
+Route::put('/liste-annonces/{annonce}', [AnnonceController::class, 'update'])->middleware('auth')->name('annonces.update');
+Route::delete('/liste-annonces/{annonce}', [AnnonceController::class, 'destroy'])->middleware('auth')->name('annonces.destroy');
 
 
 Route::get('/liste-annonces', ListeAnnonces::class)->name('livewire.annonces.liste');
